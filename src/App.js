@@ -46,18 +46,37 @@ class App extends Component {
   };
 
   render() {
-    return <div className="App">
+    return (
+      <div className="App">
         <h3>Add New Item</h3>
         <form onSubmit={this.addItem}>
-          <input id="todoName" onChange={e => {
-              this.setState({ todoItem: e.target.value });
-            }} type="text" placeholder="Todo.." />
+          <div class="input-field-container inline">
+            <input
+              id="textFieldOne"
+              placeholder="What do you need to do?"
+              type="text"
+              class="text-field"
+              onChange={e => {
+                this.setState({ todoItem: e.target.value });
+              }}
+            />
+            <button class="button input-button">Submit</button>
+          </div>
         </form>
         <div className="allTodos">
-          <TodoList items={this.state.todos} action={this.deleteItem} done={true} />
-          <TodoList items={this.state.todos} action={this.completeItem} done={false} />
+          <TodoList
+            items={this.state.todos}
+            action={this.deleteItem}
+            done={true}
+          />
+          <TodoList
+            items={this.state.todos}
+            action={this.completeItem}
+            done={false}
+          />
         </div>
-      </div>;
+      </div>
+    );
   }
 }
 
