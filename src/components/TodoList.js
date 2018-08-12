@@ -1,31 +1,52 @@
-import React from "react";
+import React, { Component } from "react";
+import { Card, Loader, Dimmer } from "semantic-ui-react";
+import ConfirmationModal from "../components/ConfirmationModal";
 
-const TodoList = ({ items, action, done }) => {
-  let lis = [];
-  let completionStatus = done === false ? "Todo" : "Done";
-  let completionColor = done === false ? "green" : "red";
-  let mark = done === false ? "\u2713" : "x";
-  for (let i in items) {
-    if (items[i].completed === done) {
-      lis.push(
-        <div className="todoItem" key={i}>
-          <span>{items[i].item}</span>
-          <span
-            class="status"
-            style={{ backgroundColor: completionColor }}
-            onClick={() => action(i)}
-          >
-            {mark}
-          </span>
-        </div>
-      );
+class TodoList extends Component {
+    state = {
+        confirmationOpen: false
     }
+
+    handleDelete = i => {
+        this.props.deleteItem(i);
+        this.setState({ confirmationOpen: false});
+    }
+
+  render() {
+    let view = <Dimmer active inverted>
+        <Loader inverted>Loading</Loader>
+      </Dimmer>;
+    let lis = [];
+    let completionStatus = this.props.done === false ? "Todo" : "Done";
+    let completionColor = this.props.done === false ? "blue" : "green";
+    let spanStatus = this.props.done === false ? "button green" : "button tto";
+    let mark = this.props.done === false ? <span>Complete <i className="fas fa-check i-right"></i></span> : <span>Undo <i className="fas fa-undo-alt i-right"></i></span>;
+    for (let i in this.props.items) {
+      if (this.props.items[i].completed === this.props.done) {
+        lis.unshift(<Card key={i} color={completionColor}>
+            <Card.Content>
+              <Card.Header>{this.props.items[i].item}</Card.Header>
+            </Card.Content>
+            <Card.Content extra>
+              <div className="ui two button-holder">
+                <button onClick={() => this.props.action(i)} className={spanStatus}>
+                  {mark}
+                </button>
+                <button onClick={() => this.setState({confirmationOpen: true})} className="button red">
+                  Delete <i className="fas fa-trash-alt i-right" />
+                </button>
+              </div>
+            </Card.Content>
+            <ConfirmationModal open={this.state.confirmationOpen} close={() => this.setState({confirmationOpen: false})} confirmDelete={() => this.handleDelete(i)} />
+          </Card>);
+      }
+    }
+    if (this.props.isLoading !== true) {
+        view = lis
+    }
+    return <div className="todoItems">
+        {view}
+      </div>;
   }
-  return (
-    <div className="todoItems">
-      <h4>{completionStatus}</h4>
-      {lis}
-    </div>
-  );
-};
+}
 export default TodoList;
