@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { fire, auth } from "./fire";
 import TodoList from "./components/TodoList";
 import Login from "./components/Login";
+import ReactNotification from "react-notifications-component";
 import "./App.css";
 
 class App extends Component {
@@ -12,7 +13,8 @@ class App extends Component {
     loading: true,
     isAuth: false,
     error: null,
-    uid: "QygHXitghpPy1eiPChtJ1yOcQMy2",
+    uid: "uf8cEulfF5RSGr7uB1FHGQYS8c53",
+    adminUid: "QygHXitghpPy1eiPChtJ1yOcQMy2"
   };
 
   todosRef = fire.database().ref("todos");
@@ -27,13 +29,17 @@ class App extends Component {
     this.checkAuth();
   }
 
+  componentDidMount() {
+    this.doGreeting();
+  }
+
   componentWillUnmount() {
     fire.removeBinding(this.todosRef);
   }
 
   checkAuth = () => {
     const storedUid = localStorage.getItem("uid");
-    if (this.state.uid === storedUid) {
+    if (this.state.uid === storedUid || this.state.adminUid === storedUid) {
       this.setState({ isAuth: true });
     }
   };
@@ -59,6 +65,7 @@ class App extends Component {
       completed: false
     });
     this.setState({ todoItem: "" });
+    this.addNotification("Todo Added", "Yeah! Lets do this!! 😎", "success");
   };
 
   toggleItem = id => {
@@ -77,6 +84,7 @@ class App extends Component {
           completed: true
         }
       });
+      this.addNotification("Todo Complete", "Woooo! Keep it up!! 😁", "success");
     }
   };
 
@@ -88,7 +96,28 @@ class App extends Component {
     this.todosRef.child(id).remove();
     let { [id]: deleted, ...todos } = this.state.todos;
     this.setState({ todos });
+    this.addNotification("Item Deleted", "Let's hope that was a typo! 🤔", "danger");
   };
+
+  doGreeting = () => {
+    if (this.state.isAuth) {
+      this.addNotification(null, "Welcome back baby 😘", "default");
+    }
+  }
+
+  addNotification = (title, message, type) => {
+    this.notificationDOMRef.addNotification({
+      title: title,
+      message: message,
+      type: type,
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animated", "bounceIn"],
+      animationOut: ["animated", "bounceOut"],
+      dismiss: { duration: 4000 },
+      dismissable: { click: true }
+    });
+  }
 
   render() {
     let currentView = (
@@ -148,6 +177,7 @@ class App extends Component {
     }
     return (
       <div className="App">
+      <ReactNotification ref={input => this.notificationDOMRef = input} />
         <header className="Header">
           <h1 className="sabrena">Sabrena's Todo List</h1>
         </header>

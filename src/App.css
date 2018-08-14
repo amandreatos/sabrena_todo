@@ -96,7 +96,7 @@ button {
     font-family: 'Lobster', cursive;
     font-size: 4rem;
     letter-spacing: 3px;
-    text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+    text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
     color: #903ee5;
 }
 
@@ -881,4 +881,21 @@ span.status.complete {
 
 .i-right {
   margin-left: 0.4rem;
+}
+
+@media (max-width: 530px) {
+  .sabrena {
+    font-size: 3.5rem;
+  }
+  .Header {
+    margin: 0 0 2rem;
+  }
+  .formContainer {
+    width: 100%;
+}
+  .input-field-container.inline {
+    width: 300px;
+    border-radius: 3px;
+    box-shadow: 0px 2px 12px -4px rgba(0, 0, 0, 0.3);
+}
 }

@@ -24,7 +24,7 @@ class Login extends Component {
           <input onChange={e => this.setState({email: e.target.value})} id="email" placeholder="Email" type="email" name="email" />
           <label htmlFor="email">Email:</label>
           <div className="form-icon">
-            <i class="far fa-envelope"></i>
+            <i className="far fa-envelope"></i>
           </div>
         </div>
         <div className="floating-label w-icon">
@@ -55,7 +55,7 @@ class Login extends Component {
           </div>
         </div>
         <div className="button-container">
-          <button className="button darkblue sm outline">Login <i class="fas fa-sign-in-alt"></i></button>
+          <button className="button darkblue sm outline">Login <i className="fas fa-sign-in-alt"></i></button>
         </div>
       </form>
       </div>

@@ -17,13 +17,12 @@ class TodoList extends Component {
         <Loader inverted>Loading</Loader>
       </Dimmer>;
     let lis = [];
-    let completionStatus = this.props.done === false ? "Todo" : "Done";
     let completionColor = this.props.done === false ? "blue" : "green";
     let spanStatus = this.props.done === false ? "button green" : "button tto";
     let mark = this.props.done === false ? <span>Complete <i className="fas fa-check i-right"></i></span> : <span>Undo <i className="fas fa-undo-alt i-right"></i></span>;
     for (let i in this.props.items) {
       if (this.props.items[i].completed === this.props.done) {
-        lis.unshift(<Card key={i} color={completionColor}>
+        lis.push(<Card key={i} color={completionColor}>
             <Card.Content>
               <Card.Header>{this.props.items[i].item}</Card.Header>
             </Card.Content>
@@ -42,7 +41,11 @@ class TodoList extends Component {
       }
     }
     if (this.props.isLoading !== true) {
-        view = lis
+        if (lis[0]) {
+            view = lis;
+        } else {
+            view = <h5>Add a todo to get started!</h5>;
+        }
     }
     return <div className="todoItems">
         {view}
